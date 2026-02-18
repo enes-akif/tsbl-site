@@ -1,102 +1,105 @@
-/* GLOBAL */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
 body {
-  color: #333;
-  line-height: 1.6;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white;
 }
 
-/* NAVIGATION */
-header {
-  background: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
+/* NAVBAR */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    z-index: 1000;
 }
 
-.nav-links li {
-  list-style: none;
-  display: inline;
-  margin-left: 1.5rem;
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
 }
 
-.nav-links a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
+.navbar a {
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
 }
 
-.logo {
-  font-size: 1.7rem;
-  font-weight: 700;
-  color: #222;
+.navbar a:hover {
+    color: #00f2fe;
 }
 
 /* HERO */
-#hero {
-  background: url("https://images.pexels.com/photos/3183198/pexels-photo-3183198.jpeg") center/cover no-repeat;
-  height: 70vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #fff;
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 80px;
 }
 
-#hero h1 {
-  font-size: 3rem;
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    max-width: 600px;
+    margin-bottom: 30px;
 }
 
 .btn {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: .8rem 1.5rem;
-  background: #ff7f50;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 600;
-  border-radius: 5px;
+    background: linear-gradient(45deg, #00f2fe, #4facfe);
+    padding: 12px 25px;
+    border-radius: 30px;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
-/* CONTAINER */
-.container {
-  padding: 4rem 2rem;
-  text-align: center;
-}
-
-.container h2 {
-  margin-bottom: 1rem;
+.btn:hover {
+    transform: scale(1.1);
 }
 
 /* CARDS */
 .cards {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 100px 50px;
+    flex-wrap: wrap;
 }
 
 .card {
-  background: #fff;
-  padding: 1.8rem;
-  border-radius: 12px;
-  width: 250px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: rgba(255,255,255,0.1);
+    padding: 30px;
+    border-radius: 15px;
+    width: 300px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    background: rgba(255,255,255,0.2);
 }
 
 /* FOOTER */
 footer {
-  background: #222;
-  color: #fff;
-  padding: 1.5rem;
+    text-align: center;
+    padding: 20px;
+    background: rgba(0,0,0,0.5);
 }
