@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>TÜBİTAK 2204-A</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <span>TÜBİTAK 2204-A</span>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#anasayfa">AnaSayfa</a></li>
+            <li><a href="#sayac">Geri Sayım</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="anasayfa" class="hero">
+    <canvas id="starCanvas"></canvas>
+
+    <div class="hero-content">
+        <h1>Bilimle Geleceğe</h1>
+        <p>TÜBİTAK 2204-A Lise Projeleri</p>
+    </div>
+</section>
+
+<section id="sayac" class="countdown-section">
+    <h2>23.02.2026 12:45 Geri Sayım</h2>
+    <div class="countdown">
+        <div><span id="days">0</span><p>Gün</p></div>
+        <div><span id="hours">0</span><p>Saat</p></div>
+        <div><span id="minutes">0</span><p>Dakika</p></div>
+        <div><span id="seconds">0</span><p>Saniye</p></div>
+    </div>
+</section>
+
+<footer>
+    © 2026 TÜBİTAK 2204-A
+</footer>
+
+<script>
+/* ===========================
+   YILDIZ SİSTEMİ (Mouse Tepkili)
+=========================== */
+
+const canvas = document.getElementById("starCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+let mouse = { x: null, y: null };
+
+window.addEventListener("mousemove", function(event){
+    mouse.x = event.x;
+    mouse.y = event.y;
+});
+
+class Star {
+    constructor(){
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2;
+        this.baseX = this.x;
+        this.baseY = this.y;
+    }
+
+    draw(){
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    update(){
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let distance = Math.sqrt(dx*dx + dy*dy);
+
+        if(distance < 100){
+            this.x -= dx / 20;
+            this.y -= dy / 20;
+        } else {
+            this.x += (this.baseX - this.x) / 20;
+            this.y += (this.baseY - this.y) / 20;
+        }
+    }
+}
+
+function init(){
+    stars = [];
+    for(let i=0;i<200;i++){
+        stars.push(new Star());
+    }
+}
+
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(star=>{
+        star.update();
+        star.draw();
+    });
+    requestAnimationFrame(animate);
+}
+
+init();
+animate();
+
+window.addEventListener("resize", function(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    init();
+});
+
+/* ===========================
+   GERİ SAYIM
+=========================== */
+
+const targetDate = new Date("Feb 23, 2026 12:45:00").getTime();
+
+setInterval(()=>{
+    const now = new Date().getTime();
+    const difference = targetDate - now;
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    document.getElementById("days").innerHTML = days;
+    document.getElementById("hours").innerHTML = hours;
+    document.getElementById("minutes").innerHTML = minutes;
+    document.getElementById("seconds").innerHTML = seconds;
+},1000);
+
+</script>
+
+</body>
+</html>
