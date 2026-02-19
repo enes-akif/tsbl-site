@@ -10,118 +10,63 @@ const h=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
 const m=Math.floor((distance%(1000*60*60))/(1000*60));
 const s=Math.floor((distance%(1000*60))/1000);
 
-update("days",d);
-update("hours",h);
-update("minutes",m);
-update("seconds",s);
+document.getElementById("days").innerHTML=d;
+document.getElementById("hours").innerHTML=h;
+document.getElementById("minutes").innerHTML=m;
+document.getElementById("seconds").innerHTML=s;
 
 },1000);
 
-function update(id,val){
-const el=document.getElementById(id);
-if(el.innerHTML!=val){
-el.style.transform="scale(1.3)";
-setTimeout(()=>el.style.transform="scale(1)",200);
-el.innerHTML=val;
-}
-}
-
-/* THREE JS EARTH */
+/* THREE JS SCENE */
 const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(75,1,0.1,1000);
+const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
 const renderer=new THREE.WebGLRenderer({alpha:true});
-renderer.setSize(450,450);
-document.getElementById("earth3d").appendChild(renderer.domElement);
+renderer.setSize(window.innerWidth,window.innerHeight);
+document.getElementById("three-container").appendChild(renderer.domElement);
 
-const geometry=new THREE.SphereGeometry(2,64,64);
-const texture=new THREE.TextureLoader().load("https://threejsfundamentals.org/threejs/resources/images/earth-day.jpg");
-const material=new THREE.MeshStandardMaterial({map:texture});
-const earth=new THREE.Mesh(geometry,material);
-scene.add(earth);
+/* STARS */
+const starGeometry=new THREE.BufferGeometry();
+const starVertices=[];
+for(let i=0;i<1000;i++){
+starVertices.push(
+THREE.MathUtils.randFloatSpread(2000),
+THREE.MathUtils.randFloatSpread(2000),
+THREE.MathUtils.randFloatSpread(2000)
+);
+}
+starGeometry.setAttribute('position',new THREE.Float32BufferAttribute(starVertices,3));
+const starMaterial=new THREE.PointsMaterial({color:0xffffff});
+const stars=new THREE.Points(starGeometry,starMaterial);
+scene.add(stars);
 
-const light=new THREE.DirectionalLight(0xffffff,1.2);
-light.position.set(5,0,5);
+/* 3D METEOR */
+const meteorGeometry=new THREE.SphereGeometry(1,32,32);
+const meteorMaterial=new THREE.MeshStandardMaterial({color:0xff5500,emissive:0xff2200});
+const meteor=new THREE.Mesh(meteorGeometry,meteorMaterial);
+scene.add(meteor);
+
+meteor.position.set(-50,30,-50);
+
+/* LIGHT */
+const light=new THREE.PointLight(0xffffff,2);
+light.position.set(10,10,10);
 scene.add(light);
 
-camera.position.z=5;
+camera.position.z=50;
 
 function animate(){
 requestAnimationFrame(animate);
-earth.rotation.y+=0.003;
+
+/* Meteor movement */
+meteor.position.x+=0.5;
+meteor.position.y-=0.3;
+meteor.rotation.x+=0.1;
+
+if(meteor.position.y<-30){
+meteor.position.set(-50,30,-50);
+}
+
 renderer.render(scene,camera);
 }
+
 animate();
-
-/* SCROLL ZOOM EFFECT */
-window.addEventListener("scroll",()=>{
-let scroll=window.scrollY;
-camera.position.z=5-(scroll/600);
-});
-
-/* STAR SPEED EFFECT */
-const canvas=document.getElementById("stars");
-const ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let stars=[];
-for(let i=0;i<200;i++){
-stars.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-size:Math.random()*2
-});
-}
-
-function drawStars(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-let speed=1+(window.scrollY/300);
-
-stars.forEach(star=>{
-star.y+=speed;
-if(star.y>canvas.height) star.y=0;
-
-ctx.fillStyle="white";
-ctx.fillRect(star.x,star.y,star.size,star.size);
-});
-requestAnimationFrame(drawStars);
-}
-drawStars();
-
-/* CINEMA METEOR */
-function meteor(){
-let x=Math.random()*canvas.width;
-let y=0;
-let angle=Math.random()*Math.PI/3+Math.PI/6;
-let speed=10;
-
-function animateMeteor(){
-ctx.beginPath();
-ctx.moveTo(x,y);
-ctx.lineTo(x-120*Math.cos(angle),y+120*Math.sin(angle));
-ctx.strokeStyle="orange";
-ctx.lineWidth=4;
-ctx.stroke();
-
-x+=speed*Math.cos(angle);
-y+=speed*Math.sin(angle);
-
-if(y>canvas.height*0.6){
-impact();
-return;
-}
-requestAnimationFrame(animateMeteor);
-}
-animateMeteor();
-}
-
-function impact(){
-document.getElementById("flash").style.opacity=0.8;
-setTimeout(()=>document.getElementById("flash").style.opacity=0,200);
-
-document.body.style.transform="translateX(5px)";
-setTimeout(()=>document.body.style.transform="translateX(-5px)",50);
-setTimeout(()=>document.body.style.transform="translateX(0)",100);
-}
-
-setInterval(meteor,5000);
