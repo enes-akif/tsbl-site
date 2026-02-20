@@ -1,147 +1,125 @@
-// SCENE
+// THREE JS SAHNE
 const scene = new THREE.Scene();
 
-// CAMERA
 const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    2000
+    1000
 );
-camera.position.z = 120;
+camera.position.z = 80;
 
-// RENDERER (TRANSPARAN)
 const renderer = new THREE.WebGLRenderer({
     canvas: document.querySelector("#bg"),
-    alpha: true,
     antialias: true
 });
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-// ÖNEMLİ → transparan arka plan
-renderer.setClearColor(0x000000, 0);
 
-// IŞIK
-const light = new THREE.PointLight(0xffffff, 2);
-light.position.set(200, 200, 200);
-scene.add(light);
+// -------------------------
+// ⭐ GERÇEKÇİ YILDIZ SİSTEMİ
+// -------------------------
 
-const ambient = new THREE.AmbientLight(0xffffff, 0.4);
-scene.add(ambient);
-
-// 🌍 EARTH
-const earthGeometry = new THREE.SphereGeometry(30, 64, 64);
-const earthMaterial = new THREE.MeshStandardMaterial({
-    color: 0x1e5eff,
-    metalness: 0.3,
-    roughness: 0.7
-});
-const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-scene.add(earth);
-
-// ⭐ STARS
-const starCount = 4000;
+const starCount = 3500;
 const starGeometry = new THREE.BufferGeometry();
-const positions = [];
+const starVertices = [];
 
 for (let i = 0; i < starCount; i++) {
-    positions.push(
-        (Math.random() - 0.5) * 800,
-        (Math.random() - 0.5) * 800,
-        (Math.random() - 0.5) * 800
-    );
+
+    const x = (Math.random() - 0.5) * 800;
+    const y = (Math.random() - 0.5) * 800;
+    const z = (Math.random() - 0.5) * 800;
+
+    starVertices.push(x, y, z);
 }
 
 starGeometry.setAttribute(
     "position",
-    new THREE.Float32BufferAttribute(positions, 3)
+    new THREE.Float32BufferAttribute(starVertices, 3)
 );
 
 const starMaterial = new THREE.PointsMaterial({
     color: 0xffffff,
     size: 0.7,
-    sizeAttenuation: true
+    sizeAttenuation: true,
+    transparent: true,
+    opacity: 0.9
 });
 
 const stars = new THREE.Points(starGeometry, starMaterial);
 scene.add(stars);
 
+
+// -------------------------
 // 🖱 MOUSE PARALLAX
+// -------------------------
+
 let mouseX = 0;
 let mouseY = 0;
 
 document.addEventListener("mousemove", (event) => {
+
     mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
     mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+
 });
 
 function updateStars() {
-    stars.rotation.y += (mouseX * 0.002 - stars.rotation.y) * 0.02;
-    stars.rotation.x += (-mouseY * 0.002 - stars.rotation.x) * 0.02;
+
+    stars.rotation.y += (mouseX * 0.002 - stars.rotation.y) * 0.03;
+    stars.rotation.x += (-mouseY * 0.002 - stars.rotation.x) * 0.03;
+
 }
 
-// ☄️ METEOR
-let meteor;
-let meteorActive = false;
 
-function createMeteor() {
+// -------------------------
+// 🌍 BASİT DÜNYA (geçici)
+// -------------------------
 
-    const geometry = new THREE.SphereGeometry(3, 16, 16);
+const geometry = new THREE.SphereGeometry(30, 64, 64);
 
-    const material = new THREE.MeshStandardMaterial({
-        color: 0xff5500,
-        emissive: 0xff2200,
-        emissiveIntensity: 2
-    });
+const material = new THREE.MeshStandardMaterial({
+    color: 0x3366ff
+});
 
-    meteor = new THREE.Mesh(geometry, material);
+const earth = new THREE.Mesh(geometry, material);
+scene.add(earth);
 
-    meteor.position.set(
-        (Math.random() - 0.5) * 700,
-        (Math.random() - 0.5) * 700,
-        -600
-    );
 
-    scene.add(meteor);
-    meteorActive = true;
-}
+// IŞIK
+const light = new THREE.PointLight(0xffffff, 2);
+light.position.set(100, 100, 100);
+scene.add(light);
 
-function updateMeteor() {
-    if (!meteorActive || !meteor) return;
 
-    meteor.position.lerp(new THREE.Vector3(0, 0, 0), 0.0018);
+// -------------------------
+// 🎬 ANIMATE
+// -------------------------
 
-    if (meteor.position.length() < 45) {
-        scene.remove(meteor);
-        meteorActive = false;
-    }
-}
-
-function launchMeteor() {
-    if (!meteorActive) createMeteor();
-}
-
-setInterval(launchMeteor, 6000);
-
-// ANIMATE
 function animate() {
     requestAnimationFrame(animate);
 
     earth.rotation.y += 0.002;
 
     updateStars();
-    updateMeteor();
 
     renderer.render(scene, camera);
 }
 
 animate();
 
-// RESPONSIVE
+
+// -------------------------
+// 📱 RESPONSIVE
+// -------------------------
+
 window.addEventListener("resize", () => {
+
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+
     renderer.setSize(window.innerWidth, window.innerHeight);
+
 });
