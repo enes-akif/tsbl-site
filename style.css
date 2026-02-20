@@ -1,71 +1,24 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-scroll-behavior:smooth;
-font-family:'Orbitron',sans-serif;
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+
+    /* Premium uzay arka plan */
+    background: radial-gradient(circle at center, #0d1b2a 0%, #000814 70%);
 }
 
-body{
-background:black;
-color:white;
-overflow-x:hidden;
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
 
-header{
-position:fixed;
-top:0;
-width:100%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 60px;
-background:rgba(0,0,0,0.7);
-backdrop-filter:blur(8px);
-z-index:10;
-}
-
-.logo-area{
-display:flex;
-align-items:center;
-gap:15px;
-}
-
-.logo{
-width:45px;
-}
-
-h1{
-font-weight:700;
-letter-spacing:2px;
-}
-
-nav a{
-color:white;
-text-decoration:none;
-margin-left:25px;
-transition:0.3s;
-}
-
-nav a:hover{
-color:#00aaff;
-}
-
-.section{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:42px;
-position:relative;
-z-index:5;
-}
-
-#space{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:0;
+.title {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    color: white;
+    font-size: 28px;
+    letter-spacing: 2px;
 }
