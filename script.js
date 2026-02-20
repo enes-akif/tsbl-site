@@ -11,10 +11,14 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.z = 120;
 
 // RENDERER
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+const renderer = new THREE.WebGLRenderer({
+    canvas: document.querySelector("#bg"),
+    alpha: true,
+    antialias: true
+});
+
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-document.body.appendChild(renderer.domElement);
 
 // IŞIK
 const light = new THREE.PointLight(0xffffff, 2);
@@ -170,3 +174,4 @@ window.addEventListener("resize", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 
 });
+
