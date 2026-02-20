@@ -1,0 +1,15 @@
+.meteor{
+position:fixed;
+width:3px;
+height:100px;
+background:linear-gradient(white,orange,red);
+box-shadow:0 0 20px red;
+animation:fall 3s linear forwards;
+}
+
+@keyframes fall{
+to{
+transform:translateY(120vh) translateX(200px);
+opacity:0;
+}
+}
