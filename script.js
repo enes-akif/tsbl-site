@@ -1,0 +1,117 @@
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+75,
+window.innerWidth/window.innerHeight,
+0.1,
+1000
+);
+
+const renderer = new THREE.WebGLRenderer({alpha:true,antialias:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+document.getElementById("space").appendChild(renderer.domElement);
+
+/* IŞIK */
+const ambient = new THREE.AmbientLight(0xffffff,0.6);
+scene.add(ambient);
+
+const light = new THREE.DirectionalLight(0xffffff,1);
+light.position.set(5,3,5);
+scene.add(light);
+
+/* DÜNYA */
+const textureLoader = new THREE.TextureLoader();
+const earthTexture = textureLoader.load("earth.jpg");
+
+const earthGeo = new THREE.SphereGeometry(4,128,128);
+const earthMat = new THREE.MeshStandardMaterial({
+map:earthTexture
+});
+const earth = new THREE.Mesh(earthGeo,earthMat);
+scene.add(earth);
+
+camera.position.z = 10;
+
+/* YILDIZLAR */
+const starGeometry = new THREE.BufferGeometry();
+const starCount = 1500;
+const positions = [];
+
+for(let i=0;i<starCount;i++){
+positions.push(
+( Math.random()-0.5 ) * 200,
+( Math.random()-0.5 ) * 200,
+( Math.random()-0.5 ) * 200
+);
+}
+
+starGeometry.setAttribute(
+'position',
+new THREE.Float32BufferAttribute(positions,3)
+);
+
+const starMaterial = new THREE.PointsMaterial({
+color:0xffffff,
+size:0.7
+});
+
+const stars = new THREE.Points(starGeometry,starMaterial);
+scene.add(stars);
+
+/* METEOR */
+function spawnMeteor(){
+
+const meteorGeo = new THREE.SphereGeometry(0.3,32,32);
+const meteorMat = new THREE.MeshBasicMaterial({color:0xff5500});
+const meteor = new THREE.Mesh(meteorGeo,meteorMat);
+
+meteor.position.set(
+(Math.random()-0.5)*40,
+(Math.random()-0.5)*40,
+-50
+);
+
+scene.add(meteor);
+
+const target = new THREE.Vector3(
+(Math.random()-0.5)*4,
+(Math.random()-0.5)*4,
+(Math.random()-0.5)*4
+);
+
+let progress = 0;
+
+function move(){
+progress += 0.02;
+meteor.position.lerp(target,progress);
+
+if(progress < 1){
+requestAnimationFrame(move);
+}else{
+scene.remove(meteor);
+}
+}
+
+move();
+}
+
+setInterval(spawnMeteor,8000);
+
+/* ANIMATE */
+function animate(){
+requestAnimationFrame(animate);
+
+earth.rotation.y += (Math.PI*2)/(60*10); // 10 saniyede 1 tur
+
+renderer.render(scene,camera);
+}
+
+animate();
+
+/* RESIZE */
+window.addEventListener("resize",()=>{
+camera.aspect = window.innerWidth/window.innerHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(window.innerWidth,window.innerHeight);
+});
