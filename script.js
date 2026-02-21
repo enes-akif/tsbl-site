@@ -19,8 +19,7 @@ const renderer = new THREE.WebGLRenderer({
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setClearColor(0x000000, 0);
-
+renderer.setClearColor(0x000000, 1);
 // IŞIKLAR
 const light = new THREE.PointLight(0xffffff, 2);
 light.position.set(200, 200, 200);
@@ -82,4 +81,5 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+
 });
