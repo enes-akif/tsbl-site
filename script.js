@@ -28,42 +28,59 @@ scene.add(light);
 const ambient = new THREE.AmbientLight(0xffffff, 0.4);
 scene.add(ambient);
 
-// 🌍 GERÇEKÇİ DÜNYA (Shader ile)
-const earthGeometry = new THREE.SphereGeometry(30, 128, 128);
+// === GERÇEK 3D DÜNYA ===
 
-const earthMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-        lightPosition: { value: light.position }
-    },
-    vertexShader: `
-        varying vec3 vNormal;
-        varying vec3 vPosition;
+const scene = new THREE.Scene();
 
-        void main() {
-            vNormal = normalize(normalMatrix * normal);
-            vPosition = (modelViewMatrix * vec4(position,1.0)).xyz;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-        }
-    `,
-    fragmentShader: `
-        varying vec3 vNormal;
-        varying vec3 vPosition;
+const camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+);
 
-        void main() {
-            float intensity = dot(vNormal, normalize(vec3(0.5,0.2,1.0)));
+camera.position.z = 4;
 
-            vec3 dayColor = vec3(0.0, 0.3, 0.8);
-            vec3 nightColor = vec3(0.0, 0.0, 0.2);
+const renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-            vec3 color = mix(nightColor, dayColor, intensity);
+// Işık
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(5, 3, 5);
+scene.add(light);
 
-            gl_FragColor = vec4(color, 1.0);
-        }
-    `
+// Texture yükleyici
+const loader = new THREE.TextureLoader();
+
+// NASA tarzı gerçek dünya texture
+const earthTexture = loader.load(
+    "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+);
+
+const geometry = new THREE.SphereGeometry(1, 64, 64);
+const material = new THREE.MeshStandardMaterial({
+    map: earthTexture
 });
 
-const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+const earth = new THREE.Mesh(geometry, material);
 scene.add(earth);
+
+// Animasyon
+function animate() {
+    requestAnimationFrame(animate);
+    earth.rotation.y += 0.002;
+    renderer.render(scene, camera);
+}
+
+animate();
+
+// Responsive
+window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
 // ⭐ YILDIZLAR
 const starGeometry = new THREE.BufferGeometry();
@@ -107,3 +124,4 @@ window.addEventListener("resize", () => {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
