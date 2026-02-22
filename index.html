@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TÜBİTAK 2204-A</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- THREE -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<!-- POST PROCESSING (BLOOM İÇİN ZORUNLU) -->
+<script src="https://threejs.org/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://threejs.org/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://threejs.org/examples/js/postprocessing/UnrealBloomPass.js"></script>
+
+</head>
+<body>
+
+<div id="star-background"></div>
+
+<nav>
+    <div class="nav-left">
+        <img src="logo.png" class="logo">
+        <span class="logo-text">TÜBİTAK 2204-A</span>
+    </div>
+
+    <div class="nav-right">
+        <a href="#anasayfa">Ana Sayfa</a>
+        <a href="#tematik">Tematik</a>
+
+        <div class="dropdown">
+            <button class="dropbtn">Proje Yazımı ▼</button>
+            <div class="dropdown-content">
+                <a href="#amac">Amaç</a>
+                <a href="#giris">Giriş</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropbtn">Proje Örnekleri ▼</button>
+            <div class="dropdown-content">
+                <a href="#anket">Anket Örnekleri</a>
+                <a href="#mulakat">Mülakat Örnekleri</a>
+            </div>
+        </div>
+
+        <a href="#dikkat">Dikkat</a>
+        <a href="#spss">SPSS</a>
+        <a href="#stant">Stant Sunum</a>
+    </div>
+</nav>
+
+<!-- DÜNYA ALANI -->
+<div id="earth-container"></div>
+
+<!-- SAYFALAR -->
+
+<section id="anasayfa" class="section">
+    <h1>Ana Sayfa</h1>
+</section>
+
+<section id="tematik" class="section">
+    <h1>Tematik</h1>
+</section>
+
+<section id="amac" class="section">
+    <h1>Proje Yazımı - Amaç</h1>
+</section>
+
+<section id="giris" class="section">
+    <h1>Proje Yazımı - Giriş</h1>
+</section>
+
+<section id="anket" class="section">
+    <h1>Proje Örnekleri - Anket</h1>
+</section>
+
+<section id="mulakat" class="section">
+    <h1>Proje Örnekleri - Mülakat</h1>
+</section>
+
+<section id="dikkat" class="section">
+    <h1>Dikkat</h1>
+</section>
+
+<section id="spss" class="section">
+    <h1>SPSS</h1>
+</section>
+
+<section id="stant" class="section">
+    <h1>Stant Sunum</h1>
+</section>
+
+<!-- EN SON SCRIPT -->
+<script src="script.js"></script>
+
+</body>
+</html>
